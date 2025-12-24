@@ -9,11 +9,7 @@ scrape_configs:
   - job_name: 'nvidia-gpu'
     static_configs:
       - targets: ['nvidia-dcgm-exporter:9400']
-  
-  - job_name: 'ai-mini0'
-    static_configs:
-      - targets: ['vllm-mini0:8000']
 
   - job_name: 'ai-mini1'
     static_configs:
-      - targets: ['vllm-mini1:8000']
+      - targets: ['vllm-router:9000']
