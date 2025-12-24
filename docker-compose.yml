@@ -2,8 +2,11 @@ version: '3.8'
 
 services:
   cadvisor:
-    image: registry.fpna.ir/fpna/common/cadvisor:latest
+    image: registry.fpna.ir/fpna/common/cadvisor:v0.49.1
     container_name: monitoring-cadvisor
+    privileged: true # اضافه کردن این خط ضروری است
+    devices:
+      - /dev/kmsg # برای دسترسی به لاگ‌های هسته
     ports:
       - "7080:8080"
     volumes:
@@ -12,8 +15,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro # مسیر حیاتی برای Cgroup v2
     restart: unless-stopped
-
   prometheus:
     image: registry.fpna.ir/fpna/common/prometheus:latest
     container_name: monitoring-prometheus
@@ -29,7 +32,7 @@ services:
     image: registry.fpna.ir/fpna/common/grafana:latest
     container_name: monitoring-grafana
     ports:
-      - "7010:3000"
+      - "7095:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=your_password_here
     restart: unless-stopped
